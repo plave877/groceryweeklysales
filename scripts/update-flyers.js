@@ -2,6 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 async function updateFlyers() {
+  await updateHMart();
+  await updateLotte();
+}
+
+async function updateHMart() {
   console.log('Fetching live H Mart weekly ads page...');
   try {
     const res = await fetch('https://www.hmart.com/weekly-ads/new-york-new-jersey');
@@ -9,7 +14,7 @@ async function updateFlyers() {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     const html = await res.text();
-    console.log('Page fetched successfully. Extracting flyer URLs...');
+    console.log('H Mart page fetched successfully. Extracting flyer URLs...');
 
     const patterns = {
       englishKorean: 'ENGLISH(?:\\\\u002F|/)KOREAN',
@@ -34,11 +39,7 @@ async function updateFlyers() {
       }
     }
 
-    console.log('Extracted URLs:', urls);
-
-    if (Object.keys(urls).length === 0) {
-      throw new Error('No flyer URLs could be extracted. The page structure might have changed.');
-    }
+    console.log('H Mart extracted URLs:', urls);
 
     // Path to hmart.html
     const hmartPath = path.join(__dirname, '..', 'hmart.html');
@@ -59,39 +60,88 @@ async function updateFlyers() {
 
     buttonReplacements.forEach(({ key, label }) => {
       if (urls[key]) {
-        // Regex to match the button with this specific label and replace its data-src
         const btnRegex = new RegExp(`(<button[^>]+class="[^"]*flyer-tab-btn[^"]*"[^>]*data-src=")[^"]*("[^>]*>\\s*${label.replace('(', '\\(').replace(')', '\\)')}\\s*</button>)`, 'i');
         if (hmartContent.match(btnRegex)) {
           hmartContent = hmartContent.replace(btnRegex, `$1${urls[key]}$2`);
-          console.log(`Updated button URL for: ${label}`);
-        } else {
-          console.warn(`Warning: Button for "${label}" not found in HTML`);
         }
       }
     });
 
-    // Also update the active flyer image: <img id="active-flyer-image" class="flyer-image" src="..." ... />
     if (urls.englishKorean) {
       const imgRegex = /(<img[^>]+id="active-flyer-image"[^>]*src=")[^"]*("[^>]*>)/i;
       if (hmartContent.match(imgRegex)) {
         hmartContent = hmartContent.replace(imgRegex, `$1${urls.englishKorean}$2`);
-        console.log('Updated active flyer image source URL.');
       }
-      
-      // Also update the view full image link: <a id="view-full-btn" href="..." ...>
       const hrefRegex = /(<a[^>]+id="view-full-btn"[^>]*href=")[^"]*("[^>]*>)/i;
       if (hmartContent.match(hrefRegex)) {
         hmartContent = hmartContent.replace(hrefRegex, `$1${urls.englishKorean}$2`);
-        console.log('Updated view-full button href URL.');
       }
     }
 
     fs.writeFileSync(hmartPath, hmartContent, 'utf8');
-    console.log('hmart.html has been successfully updated with the latest flyer images.');
-
+    console.log('hmart.html updated.');
   } catch (error) {
-    console.error('Error updating flyers:', error.message);
-    process.exit(1);
+    console.error('Error updating H Mart flyers:', error.message);
+  }
+}
+
+async function updateLotte() {
+  console.log('Fetching live Lotte Plaza weekly ads data...');
+  try {
+    // location 4 is NJ
+    const res = await fetch('https://api.lotteplaza.com/sale/?location=4');
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log('Lotte data fetched successfully.');
+
+    const urls = {
+      korean: data.file_korean,
+      chinese: data.file_chinese,
+      indian: data.file_indian
+    };
+
+    console.log('Lotte extracted URLs:', urls);
+
+    const lottePath = path.join(__dirname, '..', 'lotte.html');
+    if (!fs.existsSync(lottePath)) {
+      console.warn('lotte.html not found, skipping update.');
+      return;
+    }
+
+    let lotteContent = fs.readFileSync(lottePath, 'utf8');
+
+    const buttonReplacements = [
+      { key: 'korean', label: 'Korean/English' },
+      { key: 'chinese', label: 'Chinese' },
+      { key: 'indian', label: 'Indian' }
+    ];
+
+    buttonReplacements.forEach(({ key, label }) => {
+      if (urls[key]) {
+        const btnRegex = new RegExp(`(<button[^>]+class="[^"]*flyer-tab-btn[^"]*"[^>]*data-src=")[^"]*("[^>]*>\\s*${label}\\s*</button>)`, 'i');
+        if (lotteContent.match(btnRegex)) {
+          lotteContent = lotteContent.replace(btnRegex, `$1${urls[key]}$2`);
+        }
+      }
+    });
+
+    if (urls.korean) {
+      const imgRegex = /(<img[^>]+id="active-flyer-image"[^>]*src=")[^"]*("[^>]*>)/i;
+      if (lotteContent.match(imgRegex)) {
+        lotteContent = lotteContent.replace(imgRegex, `$1${urls.korean}$2`);
+      }
+      const hrefRegex = /(<a[^>]+id="view-full-btn"[^>]*href=")[^"]*("[^>]*>)/i;
+      if (lotteContent.match(hrefRegex)) {
+        lotteContent = lotteContent.replace(hrefRegex, `$1${urls.korean}$2`);
+      }
+    }
+
+    fs.writeFileSync(lottePath, lotteContent, 'utf8');
+    console.log('lotte.html updated.');
+  } catch (error) {
+    console.error('Error updating Lotte flyers:', error.message);
   }
 }
 

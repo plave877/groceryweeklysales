@@ -27,68 +27,23 @@
   <main>
     <div class="page-intro">
       <h2>🍇 Lotte Plaza Market Weekly Sales</h2>
-      <p>High-quality international and Asian grocery products at incredible prices. Discover fantastic value this week.</p>
+      <p>Compare and view live weekly specials from Lotte Plaza's New Jersey location. Toggle tabs below to switch flyers.</p>
     </div>
 
-    <div class="sales-grid">
-      <!-- Product 1 -->
-      <div class="product-card">
-        <span class="badge badge-lotte">33% OFF</span>
-        <div class="product-image-container">🥩</div>
-        <div class="product-info">
-          <span class="product-category">Meat & Poultry</span>
-          <h3 class="product-title">Fresh Ribeye Steak (per lb)</h3>
-          <div class="price-container">
-            <span class="sale-price">$9.99</span>
-            <span class="regular-price">$14.99</span>
-          </div>
-          <div class="card-action">Add to Shopping List</div>
-        </div>
+    <div class="flyer-container lotte-theme">
+      <div class="flyer-tabs" id="flyer-tabs-container">
+        <button class="flyer-tab-btn active" data-src="https://lotteplaza-file-prd.s3.amazonaws.com/attachments/sale/korean/Edison2026-6-12-6-18Knew.jpg">Korean/English</button>
+        <button class="flyer-tab-btn" data-src="https://lotteplaza-file-prd.s3.amazonaws.com/attachments/sale/chinese/Edison2026-6-12-6-18C.jpg">Chinese</button>
+        <button class="flyer-tab-btn" data-src="https://lotteplaza-file-prd.s3.amazonaws.com/attachments/sale/indian/Edison2026-6-12-6-18IP.jpg">Indian</button>
       </div>
 
-      <!-- Product 2 -->
-      <div class="product-card">
-        <span class="badge badge-lotte">Fresh</span>
-        <div class="product-image-container">🍉</div>
-        <div class="product-info">
-          <span class="product-category">Produce</span>
-          <h3 class="product-title">Sweet Seedless Watermelon (each)</h3>
-          <div class="price-container">
-            <span class="sale-price">$4.99</span>
-            <span class="regular-price">$7.99</span>
-          </div>
-          <div class="card-action">Add to Shopping List</div>
-        </div>
+      <div class="flyer-image-wrapper">
+        <img id="active-flyer-image" class="flyer-image" src="https://lotteplaza-file-prd.s3.amazonaws.com/attachments/sale/korean/Edison2026-6-12-6-18Knew.jpg" alt="Lotte Plaza Weekly Ad Flyer" />
       </div>
 
-      <!-- Product 3 -->
-      <div class="product-card">
-        <span class="badge badge-lotte">Deal</span>
-        <div class="product-image-container">🍜</div>
-        <div class="product-info">
-          <span class="product-category">Pantry</span>
-          <h3 class="product-title">Ottogi Jin Ramen Mild/Spicy (5pk)</h3>
-          <div class="price-container">
-            <span class="sale-price">$3.99</span>
-            <span class="regular-price">$5.49</span>
-          </div>
-          <div class="card-action">Add to Shopping List</div>
-        </div>
-      </div>
-
-      <!-- Product 4 -->
-      <div class="product-card">
-        <span class="badge badge-lotte">Value Size</span>
-        <div class="product-image-container">🍾</div>
-        <div class="product-info">
-          <span class="product-category">Pantry</span>
-          <h3 class="product-title">Sempio Jin Gold Soy Sauce (1.8 L)</h3>
-          <div class="price-container">
-            <span class="sale-price">$6.49</span>
-            <span class="regular-price">$8.99</span>
-          </div>
-          <div class="card-action">Add to Shopping List</div>
-        </div>
+      <div class="flyer-actions">
+        <a id="view-full-btn" href="https://lotteplaza-file-prd.s3.amazonaws.com/attachments/sale/korean/Edison2026-6-12-6-18Knew.jpg" target="_blank" class="flyer-action-btn">🔍 View Full Image</a>
+        <a id="official-site-btn" href="https://www.lotteplaza.com/sale/nj/kr" target="_blank" class="flyer-action-btn">🌐 Lotte Official Page</a>
       </div>
     </div>
   </main>

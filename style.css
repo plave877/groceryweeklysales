@@ -370,9 +370,21 @@ footer {
 }
 
 .flyer-tab-btn.active {
-  background-color: var(--hmart-color);
+  background-color: var(--primary-color);
   color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* H Mart specific active tab */
+.hmart-theme .flyer-tab-btn.active {
+  background-color: var(--hmart-color);
   box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.2);
+}
+
+/* Lotte specific active tab */
+.lotte-theme .flyer-tab-btn.active {
+  background-color: var(--lotte-color);
+  box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.2);
 }
 
 .flyer-image-wrapper {
